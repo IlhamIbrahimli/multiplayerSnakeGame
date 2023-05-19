@@ -33,12 +33,12 @@ class Game:
         self.appleRect = 0
         self.appleSpawned = False
         self.bodyParts = [[320, 320]]
-        self.bodyRect = [pygame.Rect(self.bodyParts[0][0], self.bodyParts[0][1], 90, 90)]
+        self.bodyRect = [pygame.Rect(self.bodyParts[0][0], self.bodyParts[0][1], 12, 12)]
         self.headrot = ""
         pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load("Song.mp3")
-        pygame.mixer.music.play()
+        #pygame.mixer.init()
+        #pygame.mixer.music.load("Song.mp3")
+        #pygame.mixer.music.play()
         self.font = pygame.font.SysFont("arial", 36)
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
@@ -54,7 +54,7 @@ class Game:
         self.bodyParts.insert(0, [self.bodyParts[0][0] + self.direction[0] * 16,
                                   self.bodyParts[0][1] + self.direction[1] * 16])
         del self.bodyParts[-1]
-        self.bodyRect.insert(0, pygame.Rect(self.bodyParts[0][0], self.bodyParts[0][1], 16, 16))
+        self.bodyRect.insert(0, pygame.Rect(self.bodyParts[0][0], self.bodyParts[0][1], 12, 12))
         del self.bodyRect[-1]
         # self.playerRect = pygame.Rect(self.bodyParts[0][0],self.bodyParts[0][1],100,100)
     def sockets(self):
@@ -133,19 +133,15 @@ class Game:
 
         if collide:
             self.bodyParts.append(
-                [self.bodyParts[-1][0] + self.direction[0] * 17, self.bodyParts[-1][1] + self.direction[1] * 17])
-            self.bodyRect.append(pygame.Rect(self.bodyParts[-1][0], self.bodyParts[-1][1], 16, 16))
+                [self.bodyParts[-1][0] + (self.direction[0] * 20), self.bodyParts[-1][1] + (self.direction[1] * 20)])
+            self.bodyRect.append(pygame.Rect(self.bodyParts[-1][0], self.bodyParts[-1][1], 12, 12))
             self.appleSpawned = False
             self.score += 1
-        #if len(self.bodyParts) > 1:
-            #self.collRect = self.bodyRect
-            #del self.collRect[0]
 
-            #print(self.collRect)
-            #collide2 = pygame.Rect.collidelist(self.bodyRect[0], self.collRect)
-            #print(collide2)
-            #if collide2 > 0:
-                #self.die()
+        for bPart in self.bodyParts[1:]:
+            if self.bodyParts[0][0] == bPart[0] and self.bodyParts[0][1] == bPart[1]:
+                self.die()
+
 
     def spawn_apple(self):
         self.applePos[0] = random.randint(1, 39) * 16
